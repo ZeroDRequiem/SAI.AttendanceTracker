@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32630.192
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAI.AttendanceTracker", "SAI.AttendanceTracker\SAI.AttendanceTracker.csproj", "{D8BD2C85-09AE-4A3C-93C1-7EC284FD3CCD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D8BD2C85-09AE-4A3C-93C1-7EC284FD3CCD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D8BD2C85-09AE-4A3C-93C1-7EC284FD3CCD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D8BD2C85-09AE-4A3C-93C1-7EC284FD3CCD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D8BD2C85-09AE-4A3C-93C1-7EC284FD3CCD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F73421EF-E93A-4039-B90D-09A4BB0A5926}
+	EndGlobalSection
+EndGlobal
