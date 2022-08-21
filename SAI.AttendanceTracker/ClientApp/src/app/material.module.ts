@@ -45,6 +45,8 @@ import { MatTreeModule } from '@angular/material/tree';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { CdkMenuModule } from '@angular/cdk/menu';
 import { DialogModule } from '@angular/cdk/dialog';
+import { MatMomentDateModule } from '@angular/material-moment-adapter';
+
 
 @NgModule({
   exports: [
@@ -74,6 +76,7 @@ import { DialogModule } from '@angular/cdk/dialog';
     MatInputModule,
     MatListModule,
     MatMenuModule,
+    MatMomentDateModule,
     MatNativeDateModule,
     MatPaginatorModule,
     MatProgressBarModule,
