@@ -37,3 +37,11 @@ $ClientApp-theme: mat.define-light-theme((
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.container {
+  margin: 10px;
+}
+
+.full-width-table {
+  width: 100%;
+}

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { QueryEntity } from '@datorama/akita';
-import { StudentsNotesStore, StudentsNotesState } from '../stores/students-notes.store';
+import { StudentsNotesStore, StudentsNotesState } from './students-notes.store';
 
 @Injectable({ providedIn: 'root' })
 export class StudentsNotesQuery extends QueryEntity<StudentsNotesState> {

@@ -1,53 +1,41 @@
 import { Injectable } from '@angular/core';
-import { ID } from '@datorama/akita';
+import { ID, cacheable } from '@datorama/akita';
 import { Observable, of, throwError } from 'rxjs';
-import { switchMap, tap } from 'rxjs/operators';
-import { Student } from '../models/student';
-import { StudentsStore } from '../stores/students.store';
+import { switchMap, tap, map } from 'rxjs/operators';
+import { Student, StudentsQuery, StudentsStore } from '../states/students';
 
 @Injectable({ providedIn: 'root' })
 export class StudentsService {
 
-  static_data: Student[] = [
-    { id: "0", firstName: 'Abdurrahman', lastName: 'Alatas' },
-    { id: "1", firstName: 'Rizka', lastName: 'Soebandi' },
-    { id: "2", firstName: 'Bianca', lastName: 'Cha' },
-    { id: "3", firstName: 'Brian', lastName: 'Cha' },
-    { id: "4", firstName: 'Abe 5', lastName: 'Alatas' },
-    { id: "5", firstName: 'Abe 6', lastName: 'Alatas' }
-  ];
+  private initialLoad: boolean = false;
 
-
-  constructor(private studentsStore: StudentsStore) {
+  constructor(
+    private studentsStore: StudentsStore,
+    private studentsQuery: StudentsQuery
+  ) {
   }
 
-  get(): Observable<Student[]> {
-    return of(this.static_data)
-      .pipe(
-        tap(entities => {
-          //this.studentsStore.set(entities);
-          this.studentsStore.add(entities);
-        })
-      );
+  get(forceLoad: boolean = false): Observable<Student[]> {
+
+    if (this.initialLoad || forceLoad) {
+
+      // TODO: make httpCall
+      this.initialLoad = true;
+    }
+
+    return this.studentsQuery.selectAll();
   }
 
-  getById(id: string): Observable<Student> {
-    return of(this.static_data.filter(student => student.id == id)[0])
-      .pipe(
-        switchMap(entity => {
+  getById(id: ID, forceLoad: boolean = false): Observable<Student> {
 
-          if (!entity) {
-            return throwError("entity not found.");
-          }
+    if (this.initialLoad || forceLoad) {
 
-          return of(entity);
-        }),
-        tap(entity => {
-          console.log('entity: ', entity);
-          //this.studentsStore.set(entity);
-          this.studentsStore.add(entity);
-        })
-      );
+
+      // TODO: make httpCall
+      this.initialLoad = true;
+    }
+
+    return this.studentsQuery.selectEntity(id).pipe(map(entity => entity as Student));
   }
 
   add(student: Student): void {
@@ -61,5 +49,4 @@ export class StudentsService {
   remove(id: ID): void {
     this.studentsStore.remove(id);
   }
-
 }

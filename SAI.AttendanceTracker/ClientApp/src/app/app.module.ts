@@ -21,6 +21,13 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { StudentNotesComponent } from './pages/student-notes/student-notes.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
+import { AlertDialogComponent } from './components/alert-dialog/alert-dialog.component';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { MatSelectModule } from '@angular/material/select';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatCardModule } from '@angular/material/card';
+import { StudentFormDialogComponent } from './components/student-form-dialog/student-form-dialog.component';
 
 //export const MY_FORMATS: MatDateFormats = {
 //  parse: {
@@ -41,7 +48,9 @@ import { NotFoundComponent } from './pages/not-found/not-found.component';
     HomeComponent,
     TableComponent,
     StudentNotesComponent,
-    NotFoundComponent
+    NotFoundComponent,
+    AlertDialogComponent,
+    StudentFormDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -54,7 +63,12 @@ import { NotFoundComponent } from './pages/not-found/not-found.component';
     AkitaNgRouterStoreModule,
     MatTableModule,
     MatPaginatorModule,
-    MatSortModule
+    MatSortModule,
+    MatInputModule,
+    MatButtonModule,
+    MatSelectModule,
+    MatRadioModule,
+    MatCardModule
   ],
   providers: [{ provide: NG_ENTITY_SERVICE_CONFIG, useValue: { baseUrl: 'https://jsonplaceholder.typicode.com' } }
   ],

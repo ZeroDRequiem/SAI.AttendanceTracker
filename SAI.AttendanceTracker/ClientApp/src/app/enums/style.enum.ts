@@ -1,4 +1,4 @@
-export enum Attendence {
+export enum Attendance {
   None = "None",
   Present = "Present",
   Absent = "Absent",

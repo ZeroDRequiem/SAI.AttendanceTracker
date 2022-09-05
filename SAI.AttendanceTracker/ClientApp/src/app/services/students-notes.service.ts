@@ -1,39 +1,50 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ID } from '@datorama/akita';
-import { tap } from 'rxjs';
-import { StudentNote } from '../models/student-note';
-import { StudentsNotesStore } from '../stores/students-notes.store';
+import { cacheable, ID } from '@datorama/akita';
+import { AkitaFiltersPlugin } from 'akita-filters-plugin';
+import { Observable, of } from 'rxjs';
+import { switchMap, map, tap } from "rxjs/operators";
+import { StudentNote, StudentsNotesQuery, StudentsNotesState, StudentsNotesStore } from '../states/students-notes';
 
 @Injectable({ providedIn: 'root' })
 export class StudentsNotesService {
 
-  constructor(private studentNoteStore: StudentsNotesStore) {
+  private initialLoad: boolean = false;
+  private studentsNotesFilterQuery: AkitaFiltersPlugin<StudentsNotesState>;
+
+  constructor(private studentsNotesStore: StudentsNotesStore, private studentsNotesQuery: StudentsNotesQuery) {
+
+    this.studentsNotesFilterQuery = new AkitaFiltersPlugin(studentsNotesQuery);
   }
 
+  getNotesByStudentId(studentId: string, forceLoad: boolean = false): Observable<StudentNote[]> {
 
-  getPinnedNotes() {
-    //return this.http.get<StudentNote[]>('https://api.com').pipe(tap(entities => {
-    //  this.studentNoteStore.set(entities);
-    //}));
-  }
+    if (!this.initialLoad || forceLoad) {
 
-  getNotesByStudentId(studentId: string) {
-    //return this.http.get<StudentNote[]>('https://api.com').pipe(tap(entities => {
-    //  this.studentNoteStore.set(entities);
-    //}));
+      // TODO: make httpCall
+      this.initialLoad = true;
+    }
+
+    this.studentsNotesFilterQuery.setFilter({
+      id: "studentId",
+      value: studentId,
+      predicate: (entity, index, array) => entity.studentId == studentId
+    });
+
+    return this.studentsNotesFilterQuery.selectAllByFilters()
+      .pipe(map(entities => entities as StudentNote[]));
   }
 
   add(studentNote: StudentNote) {
-    this.studentNoteStore.add(studentNote);
+    this.studentsNotesStore.add(studentNote);
   }
 
   update(id: ID, studentNote: Partial<StudentNote>) {
-    this.studentNoteStore.update(id, studentNote);
+    this.studentsNotesStore.update(id, studentNote);
   }
 
   remove(id: ID) {
-    this.studentNoteStore.remove(id);
+    this.studentsNotesStore.remove(id);
   }
 
 }

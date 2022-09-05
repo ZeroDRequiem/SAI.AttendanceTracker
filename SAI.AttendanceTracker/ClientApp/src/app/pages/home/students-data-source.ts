@@ -1,104 +1,35 @@
 import { DataSource } from '@angular/cdk/collections';
 import { Observable, ReplaySubject, of } from 'rxjs';
-import { switchMap, map } from 'rxjs/operators';
-import { combineQueries, Order } from '@datorama/akita';
-import { StudentsAttendancesQuery } from "../../queries/students-attendances.query";
-import { StudentsQuery } from "../../queries/students.query";
-import { StudentsNotesQuery } from "../../queries/students-notes.query";
+import { switchMap, map, tap } from 'rxjs/operators';
+import { combineQueries, HashMap, Order } from '@datorama/akita';
 import { MatSort } from '@angular/material/sort';
 import { AkitaFiltersPlugin, searchFilter, searchFilterIn } from 'akita-filters-plugin';
-import { StudentsState } from '../../stores/students.store';
-import { StudentsAttendancesState } from '../../stores/students-attendances.store';
-import { StudentUI } from '../../models/student-ui';
-import { StudentsNotesState } from '../../stores/students-notes.store';
-import { Student } from '../../models/student';
-import { StudentAttendance } from '../../models/student-attendance';
-import { StudentNote } from '../../models/student-note';
+import { Student, StudentsState, StudentsQuery } from '../../states/students';
 
+export class StudentsDataSource extends DataSource<Student> {
 
-
-
-export class StudentsDataSource extends DataSource<StudentUI> {
-
-  private _dataStream = new ReplaySubject<StudentUI[]>();
-  public data?: StudentUI[];
+  public data?: Student[];
+  private _dataStream = new ReplaySubject<Student[]>();
 
   private _studentsFilterQuery: AkitaFiltersPlugin<StudentsState>;
-  private _studentsAttendanceFilterQuery: AkitaFiltersPlugin<StudentsAttendancesState>;
-  private _studentsNotesFilterQuery: AkitaFiltersPlugin<StudentsNotesState>;
-
 
   constructor(
-    studentsQuery: StudentsQuery,
-    studentAttendanceQuery: StudentsAttendancesQuery,
-    studentNotesQuery: StudentsNotesQuery) {
+    studentsQuery: StudentsQuery) {
 
     super();
 
     this._studentsFilterQuery = new AkitaFiltersPlugin<StudentsState>(studentsQuery);
-    this._studentsAttendanceFilterQuery = new AkitaFiltersPlugin<StudentsAttendancesState>(studentAttendanceQuery);
-    this._studentsNotesFilterQuery = new AkitaFiltersPlugin<StudentsNotesState>(studentNotesQuery);
-
-    this._studentsFilterQuery.selectAllByFilters().pipe(
-      switchMap(students => {
-        console.log('students running...');
-        let studentsArray: Student[] = students as Student[];
-        let studentIds: string[] = studentsArray.map(student => student.id);
-
-        this._studentsAttendanceFilterQuery.setFilter({
-          id: "studentId",
-          value: studentIds,
-          predicate: (studentAttendance, index, array) => studentIds.indexOf(studentAttendance.studentId) != -1
-        });
-
-        this._studentsNotesFilterQuery.setFilter({
-          id: "studentId",
-          value: studentIds,
-          predicate: (studentNote, index, array) => studentIds.indexOf(studentNote.studentId) != -1
-        });
-
-        return combineQueries([
-          of(studentsArray),
-          this._studentsAttendanceFilterQuery.selectAllByFilters(),
-          this._studentsNotesFilterQuery.selectAllByFilters(),
-        ])
-      }),
-      map(([students, studentsAttendances, studentsNotes]) => {
-
-        let studentUIs: StudentUI[] = [];
-        let studentsAttendancesArray: StudentAttendance[] = studentsAttendances as StudentAttendance[];
-        let studentsNotesArray: StudentNote[] = studentsNotes as StudentNote[];
-
-        for (let student of students) {
-
-          let studentAttendance = studentsAttendancesArray.filter(sa => sa.studentId == student.id)[0];
-          let studentNote = studentsNotesArray.filter(sn => sn.studentId == student.id && sn.isPinned)[0];
-
-          studentUIs.push({
-            id: student.id,
-            firstName: student.firstName,
-            lastName: student.lastName,
-            middleName: student.middleName,
-
-            studentAttendanceId: studentAttendance.id,
-            attendance: studentAttendance.attendance,
-            note: studentNote?.note
-          });
-        }
-
-        return studentUIs;
-      })
-    ).subscribe(students => this.setData(students));
+    this._studentsFilterQuery.selectAllByFilters().subscribe(students => this.setData(students as Student[]))
   }
 
-  connect(): Observable<StudentUI[]> {
+  connect(): Observable<Student[]> {
 
     return this._dataStream;
   }
 
   disconnect() { }
 
-  setData(data: StudentUI[]) {
+  setData(data: Student[]) {
 
     this.data = data;
     this._dataStream.next(data);
@@ -118,8 +49,6 @@ export class StudentsDataSource extends DataSource<StudentUI> {
 
     sort.sortChange.subscribe(s => {
 
-      console.log('direction: ', s.direction);
-      console.log('active: ', s.active);
       let order: Order = s.direction === 'desc' ? Order.DESC : Order.ASC;
       let active: string = s.active;
 

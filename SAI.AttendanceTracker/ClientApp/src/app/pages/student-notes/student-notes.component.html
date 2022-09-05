@@ -1,1 +1,53 @@
-<p>student-notes works!</p>
+<div fxLayout="column" fxLayoutAlign="space-between" fxLayoutGap="20" class="container">
+
+  <div fxFlex fxLayout="row" fxLayoutGap="20">
+    <h2 fxFlex="100" style="text-align: center;">{{ (student$ | async)!.firstName }} {{ (student$ | async)!.lastName }}</h2>
+  </div>
+
+  <div fxFlex fxLayout="row" fxLayoutGap="20">
+    <div fxFlex="10">Refresh</div>
+    <div fxFlex="10">Add new Note</div>
+    <div fxFlex="10">Delete Note</div>
+    <div fxFlex="10" fxFlexOffset="40">See Full Calendar</div>
+    <div fxFlex="20">Filter notes</div>
+  </div>
+
+  <div fxFlex fxLayout="row">
+    <div fxFlex="100" class="mat-elevation-z8">
+      <table mat-table class="full-width-table" matSort aria-label="Notes">
+
+        <!-- selects Column -->
+        <ng-container matColumnDef="selects">
+          <th mat-header-cell *matHeaderCellDef>Selects</th>
+          <td mat-cell *matCellDef="let row">select</td>
+        </ng-container>
+        <!-- notes Column -->
+        <ng-container matColumnDef="notes">
+          <th mat-header-cell *matHeaderCellDef>Notes</th>
+          <td mat-cell *matCellDef="let row">{{row.note}}</td>
+        </ng-container>
+        <!-- date created Column -->
+        <ng-container matColumnDef="createdDate">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Date Created</th>
+          <td mat-cell *matCellDef="let row">{{row.date}}</td>
+        </ng-container>
+        <!-- actions Column -->
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Actions</th>
+          <td mat-cell *matCellDef="let row">{{row.isPinned}}</td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+      <!--<mat-paginator #paginator
+          [length]="dataSource?.data?.length"
+          [pageIndex]="0"
+          [pageSize]="10"
+          [pageSizeOptions]="[5, 10, 20]"
+          aria-label="Select page">
+      </mat-paginator>-->
+    </div>
+  </div>
+</div>
+

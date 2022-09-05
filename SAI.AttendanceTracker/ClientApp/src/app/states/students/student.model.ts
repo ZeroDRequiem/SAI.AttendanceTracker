@@ -1,9 +1,10 @@
-import { EntityState } from "@datorama/akita";
-import { Attendence } from "../enums/attendence";
+import { Attendance } from "../../enums";
 
 export interface Student {
   id: string;
   firstName: string;
   middleName?: string;
   lastName: string;
+  attendance: Attendance;
+  note?: string;
 }
