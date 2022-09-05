@@ -14,7 +14,7 @@ export class AlertDialogComponent implements OnInit {
     private dialogRef: MatDialogRef<AlertDialogComponent>) { }
 
   ngOnInit(): void {
-    console.log('isStyle: ', this.data.confirmStyle != 'None');
+
   }
 
   onNoClick(): void {

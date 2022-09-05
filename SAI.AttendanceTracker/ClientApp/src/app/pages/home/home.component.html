@@ -1,27 +1,23 @@
 <div fxLayout="column" fxLayoutAlign="space-between" fxLayoutGap="20" class="container">
 
   <div fxFlex fxLayout="row" fxLayoutGap="20">
-    <h2 fxFlex="100">Attendance for {{ date$ | async | date: 'EEEE, MMMM dd, YYYY'}}</h2>
+    <h2>Attendance for {{ date$ | async | date: 'EEEE, MMMM dd, YYYY'}}</h2>
   </div>
 
   <div fxFlex fxLayout="row" fxLayoutGap="20">
-    <button fxFlex="10" mat-raised-button (click)="refreshStudent_ButtonClick()">Refresh</button>
-    <button fxFlex="10" mat-raised-button (click)="addStudent_ButtonClick()">Add Student</button>
-    <button fxFlex="10" mat-raised-button *ngIf="selection.selected.length == 1" (click)="editStudent_ButtonClick()" color="accent">Edit Student</button>
-    <button fxFlex="10" mat-raised-button *ngIf="selection.selected.length != 0" (click)="deleteStudent_ButtonClick()" color="warn">
+    <button mat-raised-button (click)="refreshStudent_ButtonClick()">Refresh</button>
+    <button mat-raised-button (click)="addStudent_ButtonClick()">Add Student</button>
+    <button mat-raised-button *ngIf="selection.selected.length == 1" (click)="editStudent_ButtonClick()" color="accent">Edit Student</button>
+    <button mat-raised-button *ngIf="selection.selected.length != 0" (click)="deleteStudent_ButtonClick()" color="warn">
       Delete Student{{selection.selected.length > 1 ? "s" : ""}}
     </button>
-
-    <div fxFlex="10" *ngIf="selection.selected.length == 0"></div>
-    <div fxFlex="10" *ngIf="selection.selected.length == 0"></div>
-    <div fxFlex="10" *ngIf="selection.selected.length > 1"></div>
-
-    <mat-form-field fxFlex="30" fxFlexOffset="30">
+  </div>
+  <div fxFlex fxLayout="row" fxLayoutGap="20">
+    <mat-form-field fxFlex="100">
       <mat-label>Filter</mat-label>
       <input matInput (keyup)="filterText_Changed($event)" placeholder="Ex. ium" #input>
     </mat-form-field>
   </div>
-
   <div fxFlex fxLayout="row">
     <div fxFlex="100" class="mat-elevation-z8">
       <table mat-table class="full-width-table" matSort aria-label="Students">

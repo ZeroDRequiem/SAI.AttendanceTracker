@@ -5,7 +5,7 @@ import { MatTable } from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
 import { ID } from '@datorama/akita';
 import { BehaviorSubject } from 'rxjs';
-import { filter } from 'rxjs/operators';
+import { filter, tap } from 'rxjs/operators';
 import { StudentsService } from '../../services/students.service';
 import { StudentsDataSource } from './students-data-source';
 import { Attendance, Style } from '../../enums';
@@ -125,7 +125,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.dialog
       .open(StudentFormDialogComponent)
       .afterClosed()
-      .pipe(filter(result => !!result))
+      .pipe(
+        filter(result => !!result),
+        tap(() => this.selection.clear()))
       .subscribe(result => {
 
         this.studentsService.add(result);
@@ -144,10 +146,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
         data: dialogData
       })
       .afterClosed()
-      .pipe(filter(result => !!result))
+      .pipe(
+        filter(result => !!result),
+        tap(() => this.selection.clear()))
       .subscribe(result => {
 
-        this.selection.clear();
         this.studentsService.update(student.id, result);
       });
   }
@@ -166,15 +169,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
         data: dialogData
       })
       .afterClosed()
-      .pipe(filter(result => !!result))
+      .pipe(
+        filter(result => !!result),
+        tap(() => this.selection.clear()))
       .subscribe(() => {
 
         for (let student of this.selection.selected) {
 
           this.studentsService.remove(student.id);
         }
-
-        this.selection.clear();
       });
   }
 }
