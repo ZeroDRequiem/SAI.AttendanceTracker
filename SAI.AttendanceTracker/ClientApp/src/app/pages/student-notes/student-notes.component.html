@@ -5,21 +5,38 @@
   </div>
 
   <div fxFlex fxLayout="row" fxLayoutGap="20">
-    <div fxFlex="10">Refresh</div>
-    <div fxFlex="10">Add new Note</div>
-    <div fxFlex="10">Delete Note</div>
-    <div fxFlex="10" fxFlexOffset="40">See Full Calendar</div>
-    <div fxFlex="20">Filter notes</div>
+    <button mat-raised-button>Refresh</button>
+    <button mat-raised-button>See Full Calendar</button>
+    <button mat-raised-button color="primary">Add Note</button>
+    <button mat-raised-button color="accent">Edit Note</button>
+    <button mat-raised-button color="warn">Delete Note</button>
+  </div>
+
+  <div fxFlex fxLayout="row" fxLayoutGap="20">
+    <mat-form-field fxFlex="100">
+      <mat-label>Filter</mat-label>
+      <input matInput (keyup)="filterText_Changed($event)" placeholder="Ex. ium" #input>
+    </mat-form-field>
   </div>
 
   <div fxFlex fxLayout="row">
     <div fxFlex="100" class="mat-elevation-z8">
       <table mat-table class="full-width-table" matSort aria-label="Notes">
 
-        <!-- selects Column -->
-        <ng-container matColumnDef="selects">
-          <th mat-header-cell *matHeaderCellDef>Selects</th>
-          <td mat-cell *matCellDef="let row">select</td>
+        <!-- Checkbox Column -->
+        <ng-container matColumnDef="select">
+          <th mat-header-cell *matHeaderCellDef>
+            <mat-checkbox (change)="$event ? toggleAllRows() : null"
+                          [checked]="selection.hasValue() && isAllSelected()"
+                          [indeterminate]="selection.hasValue() && !isAllSelected()">
+            </mat-checkbox>
+          </th>
+          <td mat-cell *matCellDef="let row">
+            <mat-checkbox (click)="$event.stopPropagation()"
+                          (change)="$event ? selection.toggle(row) : null"
+                          [checked]="selection.isSelected(row)">
+            </mat-checkbox>
+          </td>
         </ng-container>
         <!-- notes Column -->
         <ng-container matColumnDef="notes">
@@ -33,8 +50,10 @@
         </ng-container>
         <!-- actions Column -->
         <ng-container matColumnDef="actions">
-          <th mat-header-cell *matHeaderCellDef>Actions</th>
-          <td mat-cell *matCellDef="let row">{{row.isPinned}}</td>
+          <th mat-header-cell *matHeaderCellDef>Pinned</th>
+          <td mat-cell *matCellDef="let row">
+            <mat-radio-button value="row.id" (change)="pinned_Changed()"></mat-radio-button>
+          </td>
         </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

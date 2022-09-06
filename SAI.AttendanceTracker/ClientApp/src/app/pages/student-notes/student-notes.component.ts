@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTable } from '@angular/material/table';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
@@ -10,6 +10,8 @@ import { StudentsService } from '../../services/students.service';
 import { StudentNotesDataSource } from './student-notes-data-source';
 import { StudentNote, StudentsNotesQuery } from '../../states/students-notes';
 import { Student } from '../../states/students';
+import { SelectionModel } from '@angular/cdk/collections';
+import { MatRadioGroup, MAT_RADIO_GROUP } from '@angular/material/radio';
 
 @Component({
   selector: 'app-student-notes',
@@ -20,10 +22,12 @@ export class StudentNotesComponent implements OnInit, AfterViewInit {
 
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatTable) table!: MatTable<StudentNote>;
-  displayedColumns: string[] = ["selects", "notes", "createdDate", "actions"];
+  @ViewChild(MAT_RADIO_GROUP) radioGroup!: MatRadioGroup;
+  displayedColumns: string[] = ["select", "notes", "createdDate", "actions"];
 
   private dataSource!: StudentNotesDataSource;
   public student$: BehaviorSubject<Student | undefined> = new BehaviorSubject<Student | undefined>(undefined);
+  selection = new SelectionModel<StudentNote>(true, []);
 
   constructor(
     private route: ActivatedRoute,
@@ -31,7 +35,10 @@ export class StudentNotesComponent implements OnInit, AfterViewInit {
     private studentsNotesService: StudentsNotesService,
     private studentsNotesQuery: StudentsNotesQuery,
     private studentsService: StudentsService
-  ) { }
+  ) { 
+
+
+  }
 
   ngOnInit(): void {
 
@@ -57,7 +64,39 @@ export class StudentNotesComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
 
+    console.log('radio-group: ', this.radioGroup);
     this.dataSource.setSortListener(this.sort);
     this.table.dataSource = this.dataSource;
+  }
+
+  
+  /** Whether the number of selected elements matches the total number of rows. */
+  isAllSelected() {
+    // const numSelected = this.selection.selected.length;
+    // const numRows = this.dataSource.data?.length ?? 0;
+    // return numSelected === numRows;
+    return false;
+  }
+
+  /** Selects all rows if they are not all selected; otherwise clear selection. */
+  toggleAllRows() {
+
+    // if (this.isAllSelected()) {
+    //   this.selection.clear();
+    //   return;
+    // }
+
+    // this.selection.select(...this.dataSource?.data ?? []);
+  }
+
+  filterText_Changed(event: Event): void {
+
+    const filterValue = (event.target as HTMLInputElement).value;
+    // this.dataSource.setFilterText(filterValue);
+  }
+
+  pinned_Changed(): void {
+
+    console.log("i happened");
   }
 }

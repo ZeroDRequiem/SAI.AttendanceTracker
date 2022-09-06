@@ -4,9 +4,10 @@
   "scripts": {
     "ng": "ng",
     "prestart": "node aspnetcore-https",
+    "start:vscode": "ng serve",
     "start": "run-script-os",
-    "start:windows": "ng serve --port 44416 --ssl --ssl-cert %APPDATA%\\ASP.NET\\https\\%npm_package_name%.pem --ssl-key %APPDATA%\\ASP.NET\\https\\%npm_package_name%.key",
-    "start:default": "ng serve --port 44416 --ssl --ssl-cert $HOME/.aspnet/https/${npm_package_name}.pem --ssl-key $HOME/.aspnet/https/${npm_package_name}.key",
+    "start:windows": "ng serve --host=127.0.0.1 --port 44416 --ssl --ssl-cert %APPDATA%\\ASP.NET\\https\\%npm_package_name%.pem --ssl-key %APPDATA%\\ASP.NET\\https\\%npm_package_name%.key",
+    "start:default": "ng serve --host=127.0.0.1 --port 44416 --ssl --ssl-cert $HOME/.aspnet/https/${npm_package_name}.pem --ssl-key $HOME/.aspnet/https/${npm_package_name}.key",
     "build": "ng build",
     "build:prod": "ng build --configuration=production",
     "build:ssr": "ng run ClientApp:server:dev",
