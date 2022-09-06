@@ -3,8 +3,9 @@ using SAI.AttendanceTracker.Models;
 
 namespace SAI.AttendanceTracker.Controllers
 {
-    [ApiController]
-    [Route("api/[controller]")]
+    [ApiController] //attribute
+    //[Route("api/[controller]")]
+    [Route("api/weather")]
     public class WeatherForecastController : ControllerBase
     {
         private static readonly string[] Summaries = new[]
@@ -18,6 +19,14 @@ namespace SAI.AttendanceTracker.Controllers
         {
             _logger = logger;
         }
+
+        [HttpGet("swag")] //action attribute
+        
+        public string GetSwag() //action
+        {
+            return "Swag";
+        }
+
 
         [HttpGet]
         public IEnumerable<WeatherForecast> Get()
