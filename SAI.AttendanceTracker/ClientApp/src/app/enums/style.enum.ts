@@ -1,6 +1,6 @@
-export enum Attendance {
+export enum Style {
   None = "None",
-  Present = "Present",
-  Absent = "Absent",
-  Excused = "Excused"
+  Primary = "Primary",
+  Accent = "Accent",
+  Warn = "Warn",
 }
