@@ -7,9 +7,9 @@
   <div fxFlex fxLayout="row" fxLayoutGap="20">
     <button mat-raised-button (click)="refreshStudent_ButtonClick()">Refresh</button>
     <button mat-raised-button (click)="addStudent_ButtonClick()">Add Student</button>
-    <button mat-raised-button *ngIf="selection.selected.length == 1" (click)="editStudent_ButtonClick()" color="accent">Edit Student</button>
-    <button mat-raised-button *ngIf="selection.selected.length != 0" (click)="deleteStudent_ButtonClick()" color="warn">
-      Delete Student{{selection.selected.length > 1 ? "s" : ""}}
+    <button mat-raised-button *ngIf="dataSource.selection.selected.length == 1" (click)="editStudent_ButtonClick()" color="accent">Edit Student</button>
+    <button mat-raised-button *ngIf="dataSource.selection.selected.length != 0" (click)="deleteStudent_ButtonClick()" color="warn">
+      Delete Student{{dataSource.selection.selected.length > 1 ? "s" : ""}}
     </button>
   </div>
   <div fxFlex fxLayout="row" fxLayoutGap="20">
@@ -25,15 +25,15 @@
         <!-- Checkbox Column -->
         <ng-container matColumnDef="select">
           <th mat-header-cell *matHeaderCellDef>
-            <mat-checkbox (change)="$event ? toggleAllRows() : null"
-                          [checked]="selection.hasValue() && isAllSelected()"
-                          [indeterminate]="selection.hasValue() && !isAllSelected()">
+            <mat-checkbox (change)="dataSource.toggleAll()"
+                          [checked]="dataSource.hasValue() && dataSource.isAllSelected()"
+                          [indeterminate]="dataSource.hasValue() && !dataSource.isAllSelected()">
             </mat-checkbox>
           </th>
           <td mat-cell *matCellDef="let row">
             <mat-checkbox (click)="$event.stopPropagation()"
-                          (change)="$event ? selection.toggle(row) : null"
-                          [checked]="selection.isSelected(row)">
+                          (change)="$event ? dataSource.toggleData(row) : null"
+                          [checked]="dataSource.isSelected(row)">
             </mat-checkbox>
           </td>
         </ng-container>
@@ -68,8 +68,8 @@
           <td mat-cell *matCellDef="let row">{{row.note}}</td>
         </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selectStudent_RowClick(row.id)"></tr>
+        <tr mat-header-row *matHeaderRowDef="dataSource.columns"></tr>
+        <tr mat-row *matRowDef="let row; columns: dataSource.columns;" (click)="selectStudent_RowClick(row.id)"></tr>
       </table>
     </div>
   </div>

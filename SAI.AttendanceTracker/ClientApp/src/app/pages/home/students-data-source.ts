@@ -1,48 +1,15 @@
-import { DataSource } from '@angular/cdk/collections';
-import { Observable, ReplaySubject, of } from 'rxjs';
-import { switchMap, map, tap } from 'rxjs/operators';
-import { combineQueries, HashMap, Order } from '@datorama/akita';
+import { Order } from '@datorama/akita';
 import { MatSort } from '@angular/material/sort';
-import { AkitaFiltersPlugin, searchFilter, searchFilterIn } from 'akita-filters-plugin';
+import { searchFilter } from 'akita-filters-plugin';
 import { Student, StudentsState, StudentsQuery } from '../../states/students';
+import { TableDataSource } from '../../datasources/table.datasource';
 
-export class StudentsDataSource extends DataSource<Student> {
-
-  public data?: Student[];
-  private _dataStream = new ReplaySubject<Student[]>();
-
-  private _studentsFilterQuery: AkitaFiltersPlugin<StudentsState>;
+export class StudentsDataSource extends TableDataSource<Student, StudentsState> {
 
   constructor(
-    studentsQuery: StudentsQuery) {
-
-    super();
-
-    this._studentsFilterQuery = new AkitaFiltersPlugin<StudentsState>(studentsQuery);
-    this._studentsFilterQuery.selectAllByFilters().subscribe(students => this.setData(students as Student[]))
-  }
-
-  connect(): Observable<Student[]> {
-
-    return this._dataStream;
-  }
-
-  disconnect() { }
-
-  setData(data: Student[]) {
-
-    this.data = data;
-    this._dataStream.next(data);
-  }
-
-  setFilterText(filterText: string) {
-
-    filterText = filterText.trim().toUpperCase();
-    this._studentsFilterQuery.setFilter({
-      id: "name",
-      value: filterText,
-      predicate: (student, index, array) => searchFilter(filterText, student)
-    });
+    query: StudentsQuery,
+    columns: string[] = []) {
+    super(query, columns);
   }
 
   setSortListener(sort: MatSort) {
@@ -56,7 +23,7 @@ export class StudentsDataSource extends DataSource<Student> {
         active = "";
       }
 
-      this._studentsFilterQuery.setSortBy({
+      this._dataQuery$.setSortBy({
         sortByOrder: order,
         sortBy: (a, b, state) => {
 

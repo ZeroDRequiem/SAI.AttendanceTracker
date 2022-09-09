@@ -1,0 +1,29 @@
+<form [formGroup]="form" novalidate (ngSubmit)="onSubmit()">
+  <mat-card class="student-card">
+    <mat-card-header>
+      <mat-card-title>
+        <h1 mat-dialog-title>Note Information</h1>
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div mat-dialog-content>
+        <div class="row">
+          <div class="col">
+            <mat-form-field class="full-width">
+              <textarea matInput placeholder="Ex. Some note here" formControlName="note" ></textarea>
+              <mat-error *ngIf="form.controls['note'].hasError('required')">
+                Note is <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+    </mat-card-content>
+    <mat-card-actions>
+      <div mat-dialog-actions align="center">
+        <button mat-raised-button color="primary" type="submit">Save</button>
+        <button mat-raised-button (click)="onNoClick()" type="button">Cancel</button>
+      </div>
+    </mat-card-actions>
+  </mat-card>
+</form>

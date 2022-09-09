@@ -25,11 +25,8 @@ import { StudentFormDialogData } from '../../components/student-form-dialog';
 export class HomeComponent implements OnInit, AfterViewInit {
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatTable) table!: MatTable<Student>;
-  selection = new SelectionModel<Student>(true, []);
-
 
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
-  displayedColumns = ['select', 'lastName', 'firstName', 'middleName', 'attendance', 'note'];
   dataSource: StudentsDataSource;
   date$ = new BehaviorSubject<Date>(new Date());
 
@@ -39,7 +36,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
     private studentsService: StudentsService,
     private studentsQuery: StudentsQuery) {
 
-    this.dataSource = new StudentsDataSource(this.studentsQuery);
+    this.dataSource = new StudentsDataSource(
+      this.studentsQuery,
+      ['select', 'lastName', 'firstName', 'middleName', 'attendance', 'note']);
   }
 
   ngOnInit(): void {
@@ -75,25 +74,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.studentsService.update(student.id, { attendance: attendance })
   }
 
-  /** Whether the number of selected elements matches the total number of rows. */
-  isAllSelected() {
-    const numSelected = this.selection.selected.length;
-    const numRows = this.dataSource.data?.length ?? 0;
-    return numSelected === numRows;
-  }
-
-  /** Selects all rows if they are not all selected; otherwise clear selection. */
-  toggleAllRows() {
-
-    if (this.isAllSelected()) {
-      this.selection.clear();
-      return;
-    }
-
-    this.selection.select(...this.dataSource?.data ?? []);
-  }
-
-
   filterText_Changed(event: Event): void {
 
     const filterValue = (event.target as HTMLInputElement).value;
@@ -117,6 +97,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   refreshStudent_ButtonClick(): void {
 
+    this.dataSource.selection.clear();
     this.studentsService.get(true).subscribe();
   }
 
@@ -127,7 +108,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       .afterClosed()
       .pipe(
         filter(result => !!result),
-        tap(() => this.selection.clear()))
+        tap(() => this.dataSource.selection.clear()))
       .subscribe(result => {
 
         this.studentsService.add(result);
@@ -136,7 +117,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   editStudent_ButtonClick(): void {
 
-    let student = this.selection.selected[0];
+    let student = this.dataSource.selection.selected[0];
     let dialogData: StudentFormDialogData = {
       ...student
     };
@@ -148,7 +129,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       .afterClosed()
       .pipe(
         filter(result => !!result),
-        tap(() => this.selection.clear()))
+        tap(() => this.dataSource.selection.clear()))
       .subscribe(result => {
 
         this.studentsService.update(student.id, result);
@@ -158,7 +139,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   deleteStudent_ButtonClick(): void {
 
     let dialogData: AlertDialogData = {
-      title: `Delete student${this.selection.selected.length > 1 ? 's' : ''}`,
+      title: `Delete student${this.dataSource.selection.selected.length > 1 ? 's' : ''}`,
       description: "Are you sure you want to delete?",
       confirmText: "Delete",
       confirmStyle: Style.Warn
@@ -169,15 +150,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
         data: dialogData
       })
       .afterClosed()
-      .pipe(
-        filter(result => !!result),
-        tap(() => this.selection.clear()))
+      .pipe(filter(result => !!result))
       .subscribe(() => {
 
-        for (let student of this.selection.selected) {
+        for (let student of this.dataSource.selection.selected) {
 
           this.studentsService.remove(student.id);
         }
+
+        this.dataSource.selection.clear()
       });
   }
 }

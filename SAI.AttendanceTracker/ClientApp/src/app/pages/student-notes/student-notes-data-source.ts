@@ -1,43 +1,23 @@
-import { DataSource } from "@angular/cdk/collections";
 import { MatSort } from "@angular/material/sort";
 import { ID, Order } from "@datorama/akita";
-import { AkitaFiltersPlugin } from "akita-filters-plugin";
-import { Observable, ReplaySubject } from "rxjs";
-import { map } from "rxjs/operators";
+import { searchFilter } from 'akita-filters-plugin';
+import { TableDataSource } from "../../datasources/table.datasource";
 import { StudentNote, StudentsNotesQuery, StudentsNotesState } from "../../states/students-notes";
 
-export class StudentNotesDataSource extends DataSource<StudentNote> {
+export class StudentNotesDataSource extends TableDataSource<StudentNote, StudentsNotesState> {
 
-  private _dataStream = new ReplaySubject<StudentNote[]>();
-  private studentsNotesFilterQuery: AkitaFiltersPlugin<StudentsNotesState>;
-
-  constructor(studentId: ID, studentsNotesQuery: StudentsNotesQuery) {
-    super();
-
-    this.studentsNotesFilterQuery = new AkitaFiltersPlugin<StudentsNotesState>(studentsNotesQuery);
+  constructor(
+    studentId: ID,
+    query: StudentsNotesQuery,
+    columns: string[] = []) {
+    super(query, columns);
 
     this.setSort(Order.DESC);
-    this.studentsNotesFilterQuery.setFilter({
+    this._dataQuery$.setFilter({
       id: "studentId",
       value: studentId,
       predicate: (entity, index, array) => entity.studentId == studentId
     });
-
-    this.studentsNotesFilterQuery.selectAllByFilters()
-      .pipe(map(studentNotes => studentNotes as StudentNote[]))
-      .subscribe(studentNotes => this.setData(studentNotes));
-  }
-
-  connect(): Observable<StudentNote[]> {
-
-    return this._dataStream;
-  }
-
-  disconnect() { }
-
-  setData(data: StudentNote[]) {
-
-    this._dataStream.next(data);
   }
 
   setSortListener(sort: MatSort) {
@@ -51,7 +31,7 @@ export class StudentNotesDataSource extends DataSource<StudentNote> {
 
   private setSort(order: Order): void {
 
-    this.studentsNotesFilterQuery.setSortBy({
+    this._dataQuery$.setSortBy({
       sortByOrder: order,
       sortBy: (a, b, state) => (a.date < b.date ? -1 : 1) * (order == Order.ASC ? 1 : -1)
     });

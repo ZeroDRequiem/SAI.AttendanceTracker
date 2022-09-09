@@ -28,6 +28,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatCardModule } from '@angular/material/card';
 import { StudentFormDialogComponent } from './components/student-form-dialog/student-form-dialog.component';
+import { StudentNoteFormDialogComponent } from './components/student-note-form-dialog/student-note-form-dialog.component';
+import { StudentCalendarComponent } from './pages/student-calendar/student-calendar.component';
 
 //export const MY_FORMATS: MatDateFormats = {
 //  parse: {
@@ -50,7 +52,9 @@ import { StudentFormDialogComponent } from './components/student-form-dialog/stu
     StudentNotesComponent,
     NotFoundComponent,
     AlertDialogComponent,
-    StudentFormDialogComponent
+    StudentFormDialogComponent,
+    StudentNoteFormDialogComponent,
+    StudentCalendarComponent
   ],
   imports: [
     BrowserModule,

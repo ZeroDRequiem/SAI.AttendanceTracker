@@ -4,6 +4,7 @@ import { TableComponent } from './components/table/table.component';
 import { MainLayoutComponent } from './layouts/main.layout/main.layout.component';
 import { HomeComponent } from './pages/home/home.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
+import { StudentCalendarComponent } from './pages/student-calendar/student-calendar.component';
 import { StudentNotesComponent } from './pages/student-notes/student-notes.component';
 
 const routes: Routes = [
@@ -15,10 +16,7 @@ const routes: Routes = [
     children: [
       { path: '', pathMatch: 'full', component: HomeComponent },
       { path: 'students/:id/notes', component: StudentNotesComponent },
-
-
-
-
+      { path: 'students/:id/calendar', component: StudentCalendarComponent },
       { path: 'testing', component: TableComponent },
       { path: '**', component: NotFoundComponent }
     ]
