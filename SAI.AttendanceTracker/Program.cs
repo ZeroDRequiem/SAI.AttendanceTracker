@@ -1,3 +1,10 @@
+using SAI.AttendanceTracker;
+
+using (SAIContext context = new SAIContext())
+{
+    context.Database.EnsureCreated();
+}
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
