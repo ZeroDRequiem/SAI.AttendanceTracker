@@ -13,8 +13,8 @@ namespace SAI.AttendanceTracker
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer(
-                "Data Source = (localdb)\\MSSQLLocalDB; Initial Catalog = SAIDatabase"
-                );
+                "Data Source = (localdb)\\MSSQLLocalDB; Initial Catalog = SAIDatabase")
+                .EnableSensitiveDataLogging();
         }
     }
 }
