@@ -16,5 +16,20 @@ namespace SAI.AttendanceTracker
                 "Data Source = (localdb)\\MSSQLLocalDB; Initial Catalog = SAIDatabase")
                 .EnableSensitiveDataLogging();
         }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<User>().HasData(
+                new User { UserID = 1, Name = "spooky", Email = "spooky@spooky.net", Password = "1234" });
+
+            var students = new Student[]
+            {
+                new Student { FirstName = "Abdurrahman", LastName = "Alatas", MiddleName = "\"Abe\"", UserID = 1, StudentID = 1 },
+                new Student { FirstName = "Alpacasso", LastName = "Kennedy", UserID = 1, StudentID = 2 },
+                new Student { FirstName = "Hakuno", LastName = "Kishinami", MiddleName = "Zabiko", UserID = 1, StudentID = 3 }
+            };
+            modelBuilder.Entity<Student>().HasData(students);
+        }
+
     }
 }

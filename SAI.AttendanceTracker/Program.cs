@@ -2,13 +2,11 @@ using Microsoft.EntityFrameworkCore;
 using SAI.AttendanceTracker;
 using SAI.AttendanceTracker.Models;
 
-using (SAIContext context = new SAIContext())
-{
-    context.Database.EnsureCreated();
-    GetUsersWithStudents();
-
-
-}
+//using (SAIContext context = new SAIContext())
+//{
+//    //context.Database.EnsureCreated();
+//    //GetUsersWithStudents();
+//}
 
 var builder = WebApplication.CreateBuilder(args);
 

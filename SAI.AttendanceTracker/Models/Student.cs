@@ -12,12 +12,9 @@ namespace SAI.AttendanceTracker.Models
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string? MiddleName { get; set; }
-
         public List<Note> Notes { get; set; }
-
         public List<Attendance> Attendances { get; set; }
-
         public int? PinnedNoteID { get; set; }
-
+        public int UserID { get; set; }
     }
 }
