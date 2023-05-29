@@ -11,6 +11,6 @@ namespace SAI.AttendanceTracker.Models
         [NotMapped]
         public Student Student { get; set; }
         public string? Status { get; set; }
-        public DateTime Date { get; set; }
+        public DateOnly Date { get; set; }
     }
 }

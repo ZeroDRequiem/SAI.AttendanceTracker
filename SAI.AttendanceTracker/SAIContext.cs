@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SAI.AttendanceTracker.Models;
+using System.ComponentModel;
 
 namespace SAI.AttendanceTracker
 {
@@ -18,6 +20,13 @@ namespace SAI.AttendanceTracker
                 .EnableSensitiveDataLogging();
         }
 
+        protected override void ConfigureConventions(ModelConfigurationBuilder builder)
+        {
+            builder.Properties<DateOnly>()
+                .HaveConversion<DateOnlyConverter>()
+                .HaveColumnType("date");
+        }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>().HasData(
@@ -32,5 +41,12 @@ namespace SAI.AttendanceTracker
             modelBuilder.Entity<Student>().HasData(students);
         }
 
+    }
+    public class DateOnlyConverter : ValueConverter<DateOnly, DateTime>
+    {
+        public DateOnlyConverter() : base(
+                d => d.ToDateTime(TimeOnly.MinValue),
+                d => DateOnly.FromDateTime(d))
+        { }
     }
 }
