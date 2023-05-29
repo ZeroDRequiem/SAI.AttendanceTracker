@@ -36,9 +36,17 @@ namespace SAI.AttendanceTracker
             {
                 new Student { FirstName = "Abdurrahman", LastName = "Alatas", MiddleName = "\"Abe\"", UserID = 1, StudentID = 1 },
                 new Student { FirstName = "Alpacasso", LastName = "Kennedy", UserID = 1, StudentID = 2 },
-                new Student { FirstName = "Hakuno", LastName = "Kishinami", MiddleName = "Zabiko", UserID = 1, StudentID = 3 }
+                new Student { FirstName = "Hakuno", LastName = "Kishinami", MiddleName = "Zabiko", UserID = 1, StudentID = 3 },
+                new Student { FirstName = "Lelouch", LastName = "Lamperouge", UserID = 1, StudentID = 4 },
             };
             modelBuilder.Entity<Student>().HasData(students);
+            var attendance = new Attendance[]
+            {
+                new Attendance { AttendanceID = 1, StudentID = 1, Date = new DateOnly(2023, 05, 28), Status = "Attended" },
+                new Attendance { AttendanceID = 2, StudentID = 2, Date = new DateOnly(2023, 05, 28), Status = "Absent" },
+                new Attendance { AttendanceID = 3, StudentID = 3, Date = new DateOnly(2023, 05, 28), Status = "Excused" },
+            };
+            modelBuilder.Entity<Attendance>().HasData(attendance);
         }
 
     }

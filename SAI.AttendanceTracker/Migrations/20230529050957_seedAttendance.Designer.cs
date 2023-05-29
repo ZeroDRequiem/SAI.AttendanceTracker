@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SAI.AttendanceTracker;
 
@@ -11,9 +12,11 @@ using SAI.AttendanceTracker;
 namespace SAI.AttendanceTracker.Migrations
 {
     [DbContext(typeof(SAIContext))]
-    partial class SAIContextModelSnapshot : ModelSnapshot
+    [Migration("20230529050957_seedAttendance")]
+    partial class seedAttendance
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -34,7 +37,6 @@ namespace SAI.AttendanceTracker.Migrations
                         .HasColumnType("date");
 
                     b.Property<string>("Status")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("StudentID")
@@ -151,13 +153,6 @@ namespace SAI.AttendanceTracker.Migrations
                             FirstName = "Hakuno",
                             LastName = "Kishinami",
                             MiddleName = "Zabiko",
-                            UserID = 1
-                        },
-                        new
-                        {
-                            StudentID = 4,
-                            FirstName = "Lelouch",
-                            LastName = "Lamperouge",
                             UserID = 1
                         });
                 });
