@@ -1,0 +1,35 @@
+<div class="card">
+    <div class="card-header">
+        {{pageTitle}}
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-2">Filter By:</div>
+            <div class="col-md-4">
+                <input type="text"/>
+            </div>
+        </div>
+        <div class="row">
+        </div>
+        <table class="table" *ngIf="students.length">
+            <thead>
+                <tr>
+                    <th>Last</th>
+                    <th>First</th>
+                    <th>Middle</th>
+                    <th>Status</th>
+                    <th>Notes</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let student of students">
+                    <td>{{student.LastName}}</td>
+                    <td>{{student.FirstName}}</td>
+                    <td>{{student.MiddleName}}</td>
+                    <td>"N/A"</td>
+                    <td>"N/A"</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
