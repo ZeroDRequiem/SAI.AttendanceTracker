@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SAI.AttendanceTracker.Models;
-using System.ComponentModel;
 
 namespace SAI.AttendanceTracker
 {
@@ -12,13 +11,7 @@ namespace SAI.AttendanceTracker
         public DbSet<Student> Students { get; set; }
         public DbSet<Attendance> Attendances { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlServer(
-                "Data Source = (localdb)\\MSSQLLocalDB; Initial Catalog = SAIDatabase")
-                .LogTo(Console.WriteLine, new[] {DbLoggerCategory.Database.Command.Name}, LogLevel.Information)
-                .EnableSensitiveDataLogging();
-        }
+        public SAIContext(DbContextOptions<SAIContext> options) : base(options) { }
 
         protected override void ConfigureConventions(ModelConfigurationBuilder builder)
         {
