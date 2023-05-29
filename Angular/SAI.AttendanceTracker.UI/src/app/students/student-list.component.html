@@ -26,8 +26,11 @@
                     <td>{{student.LastName}}</td>
                     <td>{{student.FirstName}}</td>
                     <td>{{student.MiddleName}}</td>
-                    <td>"N/A"</td>
-                    <td>"N/A"</td>
+                    <td
+                        (click)="changeStatus(student.StudentID)">
+                        {{student.Status ?? "Unknown"}}
+                    </td>
+                    <td>N/A</td>
                 </tr>
             </tbody>
         </table>
