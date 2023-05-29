@@ -6,6 +6,7 @@ using SAI.AttendanceTracker.Models;
 //{
 //    //context.Database.EnsureCreated();
 //    //GetUsersWithStudents();
+      //var students = context.Students.FromSqlInterpolated($"StudentsofUser {1}").ToList();
 //}
 
 var builder = WebApplication.CreateBuilder(args);
