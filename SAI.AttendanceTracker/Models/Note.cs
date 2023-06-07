@@ -9,7 +9,7 @@ namespace SAI.AttendanceTracker.Models
         public string Content { get; set; }
 
         [ForeignKey("StudentID")]
-        public int? StudentID { get; set; }
+        public int StudentID { get; set; }
         [NotMapped]
         public Student Student { get; set; }
         public DateTime Created { get; set;}

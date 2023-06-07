@@ -50,6 +50,23 @@ namespace SAI.AttendanceTracker.Controllers
             return StudentToDTO(student);
         }
 
+        [HttpGet("{id}/notes")]
+        public async Task<ActionResult<StudentWithNotesDTO>> GetStudentWithNotes(int id)
+        {
+            if (_context.Students == null)
+            {
+                return NotFound();
+            }
+            var student = await _context.Students.Include(s => s.Attendances).FirstOrDefaultAsync(s => s.StudentID == id);
+
+            if (student == null)
+            {
+                return NotFound();
+            }
+
+            return StudentWithNotesToDTO(student);
+        }
+
         // PUT: api/Students/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
@@ -148,5 +165,31 @@ namespace SAI.AttendanceTracker.Controllers
                 UserID = student.UserID
             };
         }
+
+        private static StudentWithNotesDTO StudentWithNotesToDTO(Student student)
+        {
+            List<NoteDTO> notesDTO = new List<NoteDTO>();
+            foreach (var note in student.Notes)
+            {
+                notesDTO.Add(new NoteDTO
+                {
+                    NoteID = note.NoteID,
+                    Type = note.Type,
+                    Content = note.Content,
+                    StudentID = note.StudentID,
+                    Created = note.Created
+                });
+            }
+            return new StudentWithNotesDTO
+            {
+                PinnedNoteID = student.PinnedNoteID,
+                FirstName = student.FirstName,
+                LastName = student.LastName,
+                MiddleName = student.MiddleName,
+                StudentID = student.StudentID,
+                Notes = notesDTO
+            };
+        }
+
     }
 }
