@@ -45,17 +45,34 @@ namespace SAI.AttendanceTracker.Controllers
             //_context.Set<Attendance>().Include(a => a.Student).Where(a => a.Date == dateOnly).Select(a => a.Student);
 
             var studentAttendances = _context.Set<Student>().Include(s => s.Attendances);
+            
+            List<StudentAttendanceDTO> studentAttendanceDTOs = new List<StudentAttendanceDTO>();
 
-            var studentAttendanceDTOs = studentAttendances.Select(x => new StudentAttendanceDTO
+            foreach(var studentAttendance in studentAttendances)
             {
-                StudentID = x.StudentID,
-                FirstName = x.FirstName,
-                LastName = x.LastName,
-                MiddleName = x.MiddleName,
-                PinnedNoteID = x.PinnedNoteID,
-                UserID = x.UserID,
-                Status = x.Attendances.Where(a => a.Date == dateOnly).Any() ? null : x.Attendances.First(x => x.Date == dateOnly).Status,
-            }).ToList();
+                var matchingAttendance = studentAttendance.Attendances.Where(a => a.Date == dateOnly).FirstOrDefault();
+                string? attendanceStatus = matchingAttendance == null ? null : matchingAttendance.Status;
+                studentAttendanceDTOs.Add(new StudentAttendanceDTO
+                {
+                    StudentID = studentAttendance.StudentID,
+                    FirstName = studentAttendance.FirstName,
+                    LastName = studentAttendance.LastName,
+                    MiddleName = studentAttendance.MiddleName,
+                    PinnedNoteID = studentAttendance.PinnedNoteID,
+                    UserID = studentAttendance.UserID,
+                    Status = attendanceStatus
+                });
+            }
+            //var studentAttendanceDTOs = studentAttendances.Select(x => new StudentAttendanceDTO
+            //{
+            //    StudentID = x.StudentID,
+            //    FirstName = x.FirstName,
+            //    LastName = x.LastName,
+            //    MiddleName = x.MiddleName,
+            //    PinnedNoteID = x.PinnedNoteID,
+            //    UserID = x.UserID,
+            //    Status = x.Attendances.Where(a => a.Date == dateOnly).Any() ? null : x.Attendances.First(x => x.Date == dateOnly).Status,
+            //}).ToList();
 
             return studentAttendanceDTOs;
 
@@ -64,7 +81,7 @@ namespace SAI.AttendanceTracker.Controllers
 
             //var studentAttendances = _context.Database.SqlQuery<StudentAttendanceDTO>($"EXEC StudentAttendanceOnDate {userID} {dateSQL}").ToList();
 
-            throw new NotImplementedException();//studentAttendances;
+            //throw new NotImplementedException();//studentAttendances;
         }
 
         // GET: api/StudentAttendances/5
