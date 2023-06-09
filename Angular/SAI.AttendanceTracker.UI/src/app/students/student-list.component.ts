@@ -1,65 +1,101 @@
 import { Component } from "@angular/core";
+import { StudentService } from "./student.service";
+import { filter, first, map, switchMap, take } from "rxjs";
+import { Student } from "./student";
+
+
+interface OnInit {
+};
 
 @Component({
     selector: "sai-students",
     templateUrl: "./student-list.component.html",
 })
-
-export class StudentListComponent{
+export class StudentListComponent implements OnInit{
     pageTitle = "Student List"
-    students: any[] = [
-        {
-            "StudentID": 1,
-            "FirstName": "Abdurrahman",
-            "LastName": "Alatas",
-            "MiddleName": "\"Abe\"",
-            "PinnedNote": null,
-            "Status": "Attended"
-        },
-        {
-            "StudentID": 2,
-            "FirstName": "Alpacasso",
-            "LastName": "Kennedy",
-            "MiddleName": null,
-            "PinnedNote": null,
-            "Status": "Absent"
-        },
-        {
-            "StudentID": 3,
-            "FirstName": "Hakuno",
-            "LastName": "Kishinami",
-            "MiddleName": "Zabiko",
-            "PinnedNote": null,
-            "Status": "Excused"
-        },
-        {
-            "StudentID": 4,
-            "FirstName": "Lelouch",
-            "LastName": "Lamperouge",
-            "MiddleName": null,
-            "PinnedNote": null,
-            "Status": null
-        }
-    ]
+    students$ = this.studentService.students$
+    students: Student[] | undefined
+    studentsOriginal: Student[] | undefined;
+    studentsUnchanged = true;
+
+    constructor(private studentService: StudentService) { }
+
+    ngOnInit(): void {
+        this.students$.subscribe(val => {
+            this.students = val;
+            this.studentsOriginal = val;
+        });
+    }
+
     changeStatus(studentID: number): void {
-        var index = this.students.findIndex(x => x.StudentID == studentID);
-        if(index >= 0)
+        if(this.students)
         {
-            switch(this.students[index].Status)
+            var index = this.students.findIndex(x => x.studentID == studentID)
+            if(index >= 0)
             {
-                case null:
-                case "Unknown":
-                    this.students[index].Status = "Attended";
-                    break;
-                case "Attended":
-                    this.students[index].Status = "Absent";
-                    break;
-                case "Absent":
-                    this.students[index].Status = "Excused";
-                    break;
-                case "Excused":
-                    this.students[index].Status = "Unknown";
-                    break;
+                this.studentsUnchanged = false;
+                var student = this.students[index];
+                switch(student.status)
+                {
+                    case null:
+                    case "Unknown":
+                        student.status = "Attended";
+                        break;
+                    case "Attended":
+                        student.status = "Absent";
+                        break;
+                    case "Absent":
+                        student.status = "Excused";
+                        break;
+                    case "Excused":
+                        student.status = "Unknown";
+                        break;
+                }
+            }
+        }
+        // this.students$.pipe(
+        //     map(students => students.findIndex(i => i.studentID == studentID)),
+        //     filter(index => index >= 0),
+        //     switchMap(index => this.students$.pipe(
+        //             map(students => students[index])
+        //         )
+        //     )
+        // ).subscribe(student => {
+        //     switch(student.status)
+        //     {
+        //         case null:
+        //         case "Unknown":
+        //             student.status = "Attended";
+        //             break;
+        //         case "Attended":
+        //             student.status = "Absent";
+        //             break;
+        //         case "Absent":
+        //             student.status = "Excused";
+        //             break;
+        //         case "Excused":
+        //             student.status = "Unknown";
+        //             break;
+        //     }
+        // })
+    }
+
+    saveChanges()
+    {
+        if(this.students 
+            && this.studentsOriginal 
+            && this.students.length == this.studentsOriginal.length)
+        {
+            for(let i = 0; i < this.students.length; i++)
+            {
+                if(this.studentsOriginal[i].status == null)
+                {
+                    //add new attendance record
+                }
+                else if(this.students[i].status != this.studentsOriginal[i].status)
+                {
+                    //update attendance record
+                }
             }
         }
     }

@@ -11,7 +11,7 @@
         </div>
         <div class="row">
         </div>
-        <table class="table" *ngIf="students.length">
+        <table class="table" *ngIf="students$ | async as studentsObservable">
             <thead>
                 <tr>
                     <th>Last</th>
@@ -23,16 +23,20 @@
             </thead>
             <tbody>
                 <tr *ngFor="let student of students">
-                    <td>{{student.LastName}}</td>
-                    <td>{{student.FirstName}}</td>
-                    <td>{{student.MiddleName}}</td>
+                    <td>{{student.lastName}}</td>
+                    <td>{{student.firstName}}</td>
+                    <td>{{student.middleName}}</td>
                     <td
-                        (click)="changeStatus(student.StudentID)">
-                        {{student.Status ?? "Unknown"}}
+                        (click)="changeStatus(student.studentID)">
+                        {{student.status || "Unknown"}}
                     </td>
                     <td>N/A</td>
                 </tr>
             </tbody>
         </table>
+        <button type="button"
+        class="btn btn-outline-secondary"
+        (click)="saveChanges()"
+        [disabled]="studentsUnchanged">Save</button>
     </div>
 </div>
