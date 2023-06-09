@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 import { StudentService } from "./student.service";
 import { filter, first, map, switchMap, take } from "rxjs";
-import { Student } from "./student";
+import { StudentAttendance } from "./studentAttendance";
 
 
 interface OnInit {
@@ -14,9 +14,10 @@ interface OnInit {
 export class StudentListComponent implements OnInit{
     pageTitle = "Student List"
     students$ = this.studentService.students$
-    students: Student[] | undefined
-    studentsOriginal: Student[] | undefined;
+    students: StudentAttendance[] | undefined
+    studentsOriginal: StudentAttendance[] | undefined;
     studentsUnchanged = true;
+    attendanceDate = new Date("05/28/2023");
 
     constructor(private studentService: StudentService) { }
 
@@ -53,31 +54,6 @@ export class StudentListComponent implements OnInit{
                 }
             }
         }
-        // this.students$.pipe(
-        //     map(students => students.findIndex(i => i.studentID == studentID)),
-        //     filter(index => index >= 0),
-        //     switchMap(index => this.students$.pipe(
-        //             map(students => students[index])
-        //         )
-        //     )
-        // ).subscribe(student => {
-        //     switch(student.status)
-        //     {
-        //         case null:
-        //         case "Unknown":
-        //             student.status = "Attended";
-        //             break;
-        //         case "Attended":
-        //             student.status = "Absent";
-        //             break;
-        //         case "Absent":
-        //             student.status = "Excused";
-        //             break;
-        //         case "Excused":
-        //             student.status = "Unknown";
-        //             break;
-        //     }
-        // })
     }
 
     saveChanges()
