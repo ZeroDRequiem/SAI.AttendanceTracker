@@ -10,6 +10,7 @@ namespace SAI.AttendanceTracker
         public string? MiddleName { get; set; }
         public int? PinnedNoteID { get; set; }
         public int UserID { get; set; }
+        public int? AttendanceID { get; set; }
         public string? Status { get; set; }
 
     }

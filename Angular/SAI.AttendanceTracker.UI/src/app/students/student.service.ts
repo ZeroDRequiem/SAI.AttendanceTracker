@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { Observable } from "rxjs";
+import { Attendance } from "../attendance/attendance";
 import { StudentAttendance } from "./studentAttendance";
 
 @Injectable({
@@ -52,6 +53,23 @@ export class StudentService {
     constructor(private http: HttpClient){
         this.studentsUrl = this.baseUrl + this.userId + "/" + this.searchDate(this.date);
         this.students$ = this.http.get<StudentAttendance[]>(this.studentsUrl);
+    }
+
+    PostAttendance(attendance : Attendance)
+    {
+        this.http.post<any>(
+            "http://localhost:5143/api/Attendances",
+            attendance
+        ).subscribe();
+    }
+
+    PutAttendance(attendance : Attendance)
+    {
+        this.http.put<any>(
+            "http://localhost:5143/api/Attendances/"
+            + attendance.attendanceID.toString(),
+            attendance
+        ).subscribe(result => console.log("success"), error => console.log("error", error));
     }
 
 }

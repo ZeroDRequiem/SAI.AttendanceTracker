@@ -3,7 +3,8 @@ export interface StudentAttendance {
     firstName: string,
     lastName: string,
     middleName?: string,
-    pinnedNoteId?: number,
+    pinnedNoteID?: number,
     userId: number,
     status: string
+    attendanceID: number
 }

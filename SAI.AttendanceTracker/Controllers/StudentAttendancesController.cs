@@ -52,6 +52,7 @@ namespace SAI.AttendanceTracker.Controllers
             {
                 var matchingAttendance = studentAttendance.Attendances.Where(a => a.Date == dateOnly).FirstOrDefault();
                 string? attendanceStatus = matchingAttendance == null ? null : matchingAttendance.Status;
+                int? attendanceID = matchingAttendance == null ? null : matchingAttendance.AttendanceID;
                 studentAttendanceDTOs.Add(new StudentAttendanceDTO
                 {
                     StudentID = studentAttendance.StudentID,
@@ -60,7 +61,8 @@ namespace SAI.AttendanceTracker.Controllers
                     MiddleName = studentAttendance.MiddleName,
                     PinnedNoteID = studentAttendance.PinnedNoteID,
                     UserID = studentAttendance.UserID,
-                    Status = attendanceStatus
+                    Status = attendanceStatus,
+                    AttendanceID = attendanceID
                 });
             }
             //var studentAttendanceDTOs = studentAttendances.Select(x => new StudentAttendanceDTO

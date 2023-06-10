@@ -2,6 +2,7 @@ import { Component } from "@angular/core";
 import { StudentService } from "./student.service";
 import { filter, first, map, switchMap, take } from "rxjs";
 import { StudentAttendance } from "./studentAttendance";
+import { Attendance } from "../attendance/attendance";
 
 
 interface OnInit {
@@ -22,10 +23,8 @@ export class StudentListComponent implements OnInit{
     constructor(private studentService: StudentService) { }
 
     ngOnInit(): void {
-        this.students$.subscribe(val => {
-            this.students = val;
-            this.studentsOriginal = val;
-        });
+        this.students$.subscribe(val => this.students = val);
+        this.students$.subscribe(val => this.studentsOriginal = val);
     }
 
     changeStatus(studentID: number): void {
@@ -56,7 +55,25 @@ export class StudentListComponent implements OnInit{
         }
     }
 
-    saveChanges()
+    jsonDate() : string
+    {
+        var date = this.attendanceDate.getFullYear().toString() + "-";
+        var month = this.attendanceDate.getMonth() + 1;
+        if(month < 10)
+        {
+            date += "0";
+        }
+        date += month.toString() + "-";
+        var day = this.attendanceDate.getDate();
+        if(day < 10)
+        {
+            date += "0"
+        }
+        date += day.toString();
+        return date;
+    }
+
+    saveChanges() : void
     {
         if(this.students 
             && this.studentsOriginal 
@@ -64,13 +81,34 @@ export class StudentListComponent implements OnInit{
         {
             for(let i = 0; i < this.students.length; i++)
             {
+                var studentStatus = this.students[i].status;
+                if(studentStatus == null)
+                {
+                    studentStatus = "Unknown";
+                }
                 if(this.studentsOriginal[i].status == null)
                 {
                     //add new attendance record
+                    this.studentService.PostAttendance(
+                        {
+                            attendanceID : 0,
+                            studentID : this.students[i].studentID,
+                            status : this.students[i].status,
+                            date : this.jsonDate()
+                        }
+                    )
                 }
                 else if(this.students[i].status != this.studentsOriginal[i].status)
                 {
-                    //update attendance record
+                    //add new attendance record
+                    this.studentService.PutAttendance(
+                        {
+                            attendanceID : this.students[i].attendanceID,
+                            studentID : this.students[i].studentID,
+                            status : this.students[i].status,
+                            date : this.jsonDate()
+                        }
+                    )
                 }
             }
         }

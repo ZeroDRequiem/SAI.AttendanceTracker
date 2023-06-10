@@ -1,10 +1,7 @@
-import { Student } from "../students/student";
-
 export interface Attendance
 {
-    attendanceId: number,
-    studentId: number,
-    student: Student,
+    attendanceID: number,
+    studentID: number,
     status: string,
-    date: Date
+    date: string
 }
